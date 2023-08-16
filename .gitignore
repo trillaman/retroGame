@@ -1,0 +1,8 @@
+x64
+lib
+.vs
+*.sln
+SDL_*.h
+*.vcxproj
+*.filters
+*.user
