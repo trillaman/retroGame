@@ -4,9 +4,7 @@
 #include "GameEngine.h"
 #include "GameState.h"
 
-SDL_Renderer* renderer = nullptr;
-SDL_Window* window = nullptr;
-SDL_Surface* screen = nullptr;
+
 
 void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool fullscreen) {
     int rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
@@ -20,15 +18,16 @@ void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, 
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     }
 
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+    this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 
-    if (window == NULL) {
+    if (this->window == NULL) {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         exit(1);
     }
-	screen = SDL_GetWindowSurface(window);
 	
-	if (!screen) {
+	this->screen = SDL_GetWindowSurface(window);
+	
+	if (!this->screen) {
 		fprintf(stderr, "Screen surface could not be created: %s\n", SDL_GetError());
 		SDL_Quit();
 		exit(1);
@@ -36,15 +35,13 @@ void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, 
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-    renderer = SDL_CreateRenderer(window, -1, rendererFlags);
+    this->renderer = SDL_CreateRenderer(window, -1, rendererFlags);
 
-    if (renderer == NULL) {
+    if (this->renderer == NULL) {
         printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
         exit(1);
     }
 
-
-	
 	m_running = true;
 	printf("Init succesfull\n");
 }
@@ -113,3 +110,4 @@ void c_GameEngine::Draw() {
 	// let the state draw the screen
 	states.back()->Draw(this);
 }
+

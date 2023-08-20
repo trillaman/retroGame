@@ -3,6 +3,7 @@
 #define GAMESTATE_H
 
 #include "GameEngine.h"
+#include "MyScene.h"
 
 class c_GameState
 {
@@ -20,6 +21,8 @@ public:
 	void ChangeState(c_GameEngine* game, c_GameState* state) {
 		game->ChangeState(state);
 	}
+
+	MyScene myscene;
 
 
 

@@ -4,64 +4,50 @@
 #include <stdio.h>
 #include <string>
 #include <iostream>
+#include "LTexture.h"
+#include "GameEngine.h"
 
-class LTexture
-{
-public:
-	//Initializes variables
-	LTexture();
+SDL_Texture* LTexture::loadTexture(std::string path, SDL_Renderer* renderer)
+{	
+	c_GameEngine game = c_GameEngine();
+	renderer = game.renderer;
+	//renderer = c_GameEngine::Instance()->renderer;
+	SDL_Texture* newTexture = nullptr;
+	SDL_Surface* loadedSurface = nullptr;
+	loadedSurface = IMG_Load(path.c_str());
 
-	//Deallocates memory
-	~LTexture();
+	if (loadedSurface == NULL) {
+		printf("Unable to load texture\n");
+	}
+	else {
+		newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+		if (newTexture == NULL) {
+			printf("Unable to create texture\n");
+			printf("%s\n", SDL_GetError());
+		}
+		SDL_FreeSurface(loadedSurface);
+	}
+	SDL_SetSurfaceBlendMode(loadedSurface, SDL_BLENDMODE_BLEND);
+	printf("Texture loaded");
+	return newTexture;
+}
 
-	//Loads image at specified path
-	bool loadFromFile(std::string path);
+void LTexture::addBackgroundLayer(SDL_Texture* texture, int posX, int posY) {
+	printf("Adding background");
+	Entity bg = { 0, 0, nullptr };
+	memset(&bg, 0, sizeof(Entity));
+	bg.x = posX;
+	bg.y = posY;
+	bg.texture = texture;
+	backgrounds.push_back(bg);
+}
 
-#if defined(SDL_TTF_MAJOR_VERSION)
-	//Creates image from font string
-	bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
-#endif
 
-	//Creates blank texture
-	bool createBlank(int width, int height, SDL_TextureAccess = SDL_TEXTUREACCESS_STREAMING);
-
-	//Deallocates texture
-	void free();
-
-	//Set color modulation
-	void setColor(Uint8 red, Uint8 green, Uint8 blue);
-
-	//Set blending
-	void setBlendMode(SDL_BlendMode blending);
-
-	//Set alpha modulation
-	void setAlpha(Uint8 alpha);
-
-	//Renders texture at given point
-	void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-
-	//Set self as render target
-	void setAsRenderTarget();
-
-	//Gets image dimensions
-	int getWidth();
-	int getHeight();
-
-	//Pixel manipulators
-	bool lockTexture();
-	bool unlockTexture();
-	void* getPixels();
-	void copyPixels(void* pixels);
-	int getPitch();
-	Uint32 getPixel32(unsigned int x, unsigned int y);
-
-private:
-	//The actual hardware texture
-	SDL_Texture* mTexture;
-	void* mPixels;
-	int mPitch;
-
-	//Image dimensions
-	int mWidth;
-	int mHeight;
-};
+void LTexture::createRect(int x, int y, int WIDTH, int HEIGHT) {
+	SDL_Rect stretchRect;
+	stretchRect.x = x;
+	stretchRect.y = y;
+	stretchRect.w = WIDTH;
+	stretchRect.h = HEIGHT;
+	backgroundRects.push_back(stretchRect);
+}

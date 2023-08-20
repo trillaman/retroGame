@@ -13,7 +13,7 @@ class c_GameEngine
 {
 public:
 
-	void Init(const char* title, int width = 640, int height = 480, bool fullscreen = false);
+	void Init(const char* title, int width = 800, int height = 600, bool fullscreen = false);
 	void Cleanup();
 
 	void ChangeState(c_GameState* state);
@@ -31,10 +31,24 @@ public:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
+	int screenWidth;
+	int screenHeight;
+	
+	static c_GameEngine* Instance() {
+		return &m_GameEngine;
+	}
+	
+	SDL_Renderer* GetRenderer() const {
+		if (renderer == NULL) {
+			printf("Renderer is null\n");
+		}
+		return renderer;
+	}
+
 private:
 	// the stack of states
 	vector<c_GameState*> states;
-
+	static c_GameEngine m_GameEngine;
 	bool m_running;
 	bool m_fullscreen;
 };

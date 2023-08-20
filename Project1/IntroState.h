@@ -4,6 +4,8 @@
 
 #include "SDL.h"
 #include "GameState.h"
+#include "LTexture.h"
+#include "GameEngine.h"
 
 class c_IntroState : public c_GameState
 {
@@ -27,6 +29,7 @@ public:
 	}
 
 
+
 protected:
 	c_IntroState() { }
 
@@ -36,6 +39,12 @@ private:
 	SDL_Surface* bg;
 	SDL_Surface* fader;
 	int alpha;
+
+	SDL_Renderer* renderer = NULL;
+
+	LTexture mBackgroundTexture;
+	LTexture mForeGroundTexture;
+	LTexture mTreesTexture;
 };
 
 #endif

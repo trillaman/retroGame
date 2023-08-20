@@ -15,11 +15,6 @@ public:
 		SDL_Texture* texture;
 	} Entity;
 
-	void Update();
-	void Render();
-	void Destroy();
-	void Load();
-	void Unload();
 	void addBackgroundLayer(SDL_Texture* texture, int posX, int posY);
 	void createRect(int x, int y, int WIDTH, int HEIGHT);
 
