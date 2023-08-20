@@ -8,8 +8,8 @@
 
 //#include "LTexture.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1200
+#define SCREEN_HEIGHT 800
 
 
 
@@ -26,14 +26,14 @@ int main(int argc, char *argv[]) {
 	
     game.ChangeState(c_IntroState::Instance());
     
-    SDL_SetRenderDrawColor(game.renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     while(game.Running()){
-
+        SDL_RenderClear(game.renderer);
 		game.HandleEvents();
 		game.Update();
+        
         game.Draw();
 
-        SDL_RenderClear(game.renderer);
+        
         SDL_RenderPresent(game.renderer);
 		SDL_Delay(20);
     }

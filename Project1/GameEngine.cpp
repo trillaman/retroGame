@@ -69,7 +69,7 @@ void c_GameEngine::ChangeState(c_GameState* state) {
 
 	// store and init the new state
 	states.push_back(state);
-	states.back()->Init();
+	states.back()->Init(this);
 }
 
 void c_GameEngine::PushState(c_GameState* state) {
@@ -80,7 +80,7 @@ void c_GameEngine::PushState(c_GameState* state) {
 
 	// store and init the new state
 	states.push_back(state);
-	states.back()->Init();
+	states.back()->Init(this);
 }
 
 void c_GameEngine::PopState() {

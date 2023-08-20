@@ -8,7 +8,7 @@
 class c_GameState
 {
 public:
-	virtual void Init() = 0;
+	virtual void Init(c_GameEngine* game) = 0;
 	virtual void Cleanup() = 0;
 
 	virtual void Pause() = 0;

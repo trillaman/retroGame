@@ -6,7 +6,7 @@
 c_ExitState c_ExitState::m_ExitState;
 
 
-void c_ExitState::Init() {
+void c_ExitState::Init(c_GameEngine* game) {
 	printf("ExitState Init\n");
 }
 

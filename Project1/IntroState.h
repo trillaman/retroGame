@@ -10,7 +10,7 @@
 class c_IntroState : public c_GameState
 {
 public:
-	void Init();
+	void Init(c_GameEngine* game);
 	void Cleanup();
 
 	void Pause();

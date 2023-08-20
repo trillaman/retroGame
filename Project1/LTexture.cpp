@@ -9,9 +9,6 @@
 
 SDL_Texture* LTexture::loadTexture(std::string path, SDL_Renderer* renderer)
 {	
-	c_GameEngine game = c_GameEngine();
-	renderer = game.renderer;
-	//renderer = c_GameEngine::Instance()->renderer;
 	SDL_Texture* newTexture = nullptr;
 	SDL_Surface* loadedSurface = nullptr;
 	loadedSurface = IMG_Load(path.c_str());
