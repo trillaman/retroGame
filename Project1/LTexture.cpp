@@ -36,15 +36,34 @@ void LTexture::addBackgroundLayer(SDL_Texture* texture, int posX, int posY) {
 	bg.x = posX;
 	bg.y = posY;
 	bg.texture = texture;
+	bg.repeat = false;
 	backgrounds.push_back(bg);
 }
 
+void LTexture::addBackgroundLayer(SDL_Texture* texture, int posX, int posY, bool repeat) {
+	printf("Adding background");
+	Entity bg = { 0, 0, nullptr };
+	memset(&bg, 0, sizeof(Entity));
+	bg.x = posX;
+	bg.y = posY;
+	bg.texture = texture;
+	bg.repeat = repeat;
+	
+	backgrounds.push_back(bg);
 
-void LTexture::createRect(int x, int y, int WIDTH, int HEIGHT) {
+}
+
+
+void LTexture::createRect(SDL_Texture* texture, int x, int y, int WIDTH, int HEIGHT) {
+	MyRect rect = { NULL, NULL };
 	SDL_Rect stretchRect;
 	stretchRect.x = x;
 	stretchRect.y = y;
 	stretchRect.w = WIDTH;
 	stretchRect.h = HEIGHT;
-	backgroundRects.push_back(stretchRect);
+	rect.stretchRect = stretchRect;
+	rect.texture = texture;
+	
+	backgroundRects.push_back(rect);
 }
+

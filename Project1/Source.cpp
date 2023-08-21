@@ -4,11 +4,11 @@
 #include <vector>
 
 #include "GameEngine.h"
-#include "IntroState.h"
+#include "MenuState.h"
 
 //#include "LTexture.h"
 
-#define SCREEN_WIDTH 1200
+#define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 800
 
 
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
     SDL_Event e;
 	
-    game.ChangeState(c_IntroState::Instance());
+    game.ChangeState(c_MenuState::Instance());
     
     while(game.Running()){
         SDL_RenderClear(game.renderer);

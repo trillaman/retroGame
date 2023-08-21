@@ -45,6 +45,7 @@ public:
 		return renderer;
 	}
 
+
 private:
 	// the stack of states
 	vector<c_GameState*> states;

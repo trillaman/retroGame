@@ -5,7 +5,6 @@
 #include "GameState.h"
 
 
-
 void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool fullscreen) {
     int rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
     int windowFlags = 0;
