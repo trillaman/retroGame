@@ -6,6 +6,7 @@
 #include <iostream>
 #include "LTexture.h"
 #include "GameEngine.h"
+#include <SDL_ttf.h>
 
 SDL_Texture* LTexture::loadTexture(std::string path, SDL_Renderer* renderer)
 {	
@@ -67,3 +68,44 @@ void LTexture::createRect(SDL_Texture* texture, int x, int y, int WIDTH, int HEI
 	backgroundRects.push_back(rect);
 }
 
+bool LTexture::loadText(std::string textureText, SDL_Color textColorParam, SDL_Renderer* renderer) {
+	if (TTF_Init() < 0) {
+		printf("Error initializing SDL_ttf: %s", TTF_GetError());
+		TTF_Quit();
+		return false;
+	}
+
+	TTF_Font* font;
+	font = TTF_OpenFont("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Fonts\\m5x7.ttf", 72);
+	if (font == NULL) {
+		printf("\nFailed to load font: %s\n", SDL_GetError());
+		TTF_Quit();
+		return false;
+	}
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "BLABLA", textColorParam);
+
+	if (textSurface == NULL) {
+		printf("\nFailed to create text surface: %s\n", SDL_GetError());
+		TTF_CloseFont(font);
+		TTF_Quit();
+		return false;
+	}
+	//SDL_SetSurfaceBlendMode(textSurface, SDL_BLENDMODE_BLEND);
+
+	SDL_Texture* text_texture;
+	text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+	if (text_texture == NULL) {
+		printf("\nFailed to create texture from surface: %s\n", SDL_GetError());
+		TTF_Quit();
+		return false;
+	}
+	int textW = 0;
+	int textH = 0;
+	SDL_QueryTexture(text_texture, NULL, NULL, &textW, &textH);
+	SDL_Rect dest = { 0, 0 , textW, textH };
+	createRect(text_texture, 0, 0, textW, textH);
+	
+	//SDL_FreeSurface(textSurface);
+
+	return true;
+}

@@ -4,6 +4,8 @@
 #include "ExitState.h"
 #include <iostream>
 #include "LTexture.h"
+#include <SDL_ttf.h>
+#include <string>
 
 c_MenuState c_MenuState::m_MenuState;
 //MyScene::Entity* myEntity;
@@ -11,24 +13,37 @@ c_MenuState c_MenuState::m_MenuState;
 LTexture ltextureMenu;
 
 void c_MenuState::Init(c_GameEngine* game) {
-	SDL_SetRenderDrawColor(game->renderer, 0xFF, 0x00, 0x00, 0xFF);
+	SDL_SetRenderDrawColor(game->renderer, 0x00, 0x00, 0x00, 0xFF);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\sky.png", game->renderer), 0, 0, false);
-	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\far-clouds.png", game->renderer), 0, 0, false);
+	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\far-clouds.png", game->renderer), 0, 0, true);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\far-mountains.png", game->renderer), 0, 0, false);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\near-clouds.png", game->renderer), 0, 0, true);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\mountains.png", game->renderer), 0, 0, false);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\trees.png", game->renderer), 0, 0, false);
+	SDL_SetRenderDrawColor(game->renderer, 255, 0, 0, 255);
 
 	for (int i = 0; i < ltextureMenu.backgrounds.size(); i++) {
 		if (ltextureMenu.backgrounds[i].repeat == true) {
-			int widthProp = game->screenWidth / ltextureMenu.getTextureSize(ltextureMenu.backgrounds[i].texture).x;
-			for (int j = 0; j < widthProp; j++)
-				ltextureMenu.createRect(ltextureMenu.backgrounds[i].texture, ltextureMenu.backgrounds[i].x + (300 * j), ltextureMenu.backgrounds[i].y, 300, game->screenHeight);
+			int textureWidth = ltextureMenu.getTextureWidthInPixels(ltextureMenu.backgrounds[i].texture).x;
+			int widthProp = game->screenWidth / textureWidth;
+			printf("\nWidthProp: %d\n", widthProp);
+			int posX = 0;
+			for (int j = 0; j <= widthProp / 2; j++) {
+				ltextureMenu.createRect(ltextureMenu.backgrounds[i].texture, ltextureMenu.backgrounds[i].x + posX, ltextureMenu.backgrounds[i].y, textureWidth * 2, game->screenHeight);
+				posX += textureWidth * 2;
 			}
+		}
 		else {
 			ltextureMenu.createRect(ltextureMenu.backgrounds[i].texture, ltextureMenu.backgrounds[i].x, ltextureMenu.backgrounds[i].y, game->screenWidth, game->screenHeight);
 		}
 	}
+
+	SDL_Color color = { 0, 0, 255 };
+	std::string text = "BLAABLAAA";
+	if (!ltextureMenu.loadText(text, color, game->renderer)) {
+		printf("Failed to render text texture!\n");
+	}
+	
 
 }
 
@@ -69,4 +84,5 @@ void c_MenuState::Draw(c_GameEngine* game) {
 	for (int i = 0; i < ltextureMenu.backgroundRects.size(); i++) {
 		SDL_RenderCopy(game->renderer, ltextureMenu.backgroundRects[i].texture, NULL, &ltextureMenu.backgroundRects[i].stretchRect);
 	}
+	///SDL_RenderPresent(game->renderer);
 }

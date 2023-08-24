@@ -48,7 +48,15 @@ public:
         return size;
     }
 
-    std::vector<SDL_Rect> getRectsWithRepeat() {}
+    SDL_Point getTextureWidthInPixels(SDL_Texture* texture) {
+		SDL_Point size;
+		SDL_QueryTexture(texture, NULL, NULL, &size.x, NULL);
+		return size;
+	}
+
+    std::vector<SDL_Rect> getRectsWithRepeat() {};
+
+    bool loadText(std::string textureText, SDL_Color textColorParam, SDL_Renderer* renderer);
 
     //Make sure to call child destructors
     virtual ~LTexture() {};

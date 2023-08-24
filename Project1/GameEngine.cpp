@@ -23,14 +23,7 @@ void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, 
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         exit(1);
     }
-	
-	this->screen = SDL_GetWindowSurface(window);
-	
-	if (!this->screen) {
-		fprintf(stderr, "Screen surface could not be created: %s\n", SDL_GetError());
-		SDL_Quit();
-		exit(1);
-	}
+
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
