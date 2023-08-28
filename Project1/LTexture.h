@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <SDL_ttf.h>
 
 class LTexture
 {
@@ -34,13 +35,62 @@ public:
     std::vector<SDL_Rect> returnRectsWithRepeat() { return backgroundRectsWithRepeat; }
 
 
+    std::vector<SDL_Rect> textRects;
+    std::vector<SDL_Rect> returnTextRects() { return textRects; }
+
+    struct MyButtons {
+        SDL_Rect rect;
+        std::string text;
+        std::string action;
+        SDL_Color textColor;
+        SDL_Point textPosition;
+        bool active;
+        int buttonID;
+        int nextButton;
+        SDL_Texture* texture;
+    };
+
+    int activeButton;
+    int getActiveButton() { return activeButton; }
+
+    std::vector<MyButtons> buttons;
+
+    void modifyButton(int buttonID, bool active, SDL_Color color, int activeButton, SDL_Renderer* renderer);
+
+    void createButton(SDL_Rect rect,
+        std::string text,
+        std::string action,
+        SDL_Color textColor,
+        SDL_Point textPosition,
+        bool active,
+        int buttonID,
+        int nextButton,
+        SDL_Renderer* renderer);
+
+    void createTextRect(int x, int y, int WIDTH, int HEIGHT);
+
+    TTF_Font* fontText = NULL;
+
     SDL_Texture* loadTexture(std::string path, SDL_Renderer* renderer);
+    SDL_Surface* setTextSurface(TTF_Font* font, std::string text, SDL_Color textColor);
 
     void addBackgroundLayer(SDL_Texture* texture, int posX, int posY);
     void addBackgroundLayer(SDL_Texture* texture, int posX, int posY, bool repeat);
 
     void createRect(SDL_Texture* texture, int x, int y, int WIDTH, int HEIGHT);
     void createRectWithRepeat(int x, int y, int WIDTH, int HEIGHT);
+
+    void setActiveButton(int i) {
+        if (i <= 0) {
+            activeButton = 0;
+        }
+        else if (i >= buttons.size() - 1) {
+			activeButton = buttons.size() - 1;
+        }
+        else {
+            activeButton = i;
+        }
+    }
 
     SDL_Point getTextureSize(SDL_Texture* texture) {
         SDL_Point size;
@@ -56,7 +106,7 @@ public:
 
     std::vector<SDL_Rect> getRectsWithRepeat() {};
 
-    bool loadText(std::string textureText, SDL_Color textColorParam, SDL_Renderer* renderer);
+    bool loadText(std::string textureText, SDL_Color textColorParam, SDL_Point position, SDL_Renderer* renderer);
 
     //Make sure to call child destructors
     virtual ~LTexture() {};

@@ -45,6 +45,8 @@ private:
 	LTexture mBackgroundTexture;
 	LTexture mForeGroundTexture;
 	LTexture mTreesTexture;
+	int activeButton = 0;
+
 };
 
 #endif
