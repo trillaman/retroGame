@@ -6,6 +6,8 @@
 #include "LTexture.h"
 #include <SDL_ttf.h>
 #include <string>
+#include "IntroState.h"
+#include <SDL_mixer.h>
 
 c_MenuState c_MenuState::m_MenuState;
 //MyScene::Entity* myEntity;
@@ -15,6 +17,7 @@ LTexture ltextureMenu;
 SDL_Color activeColor = { 255,0, 0 };
 SDL_Color inactiveColor = { 0,0, 255 };
 
+Mix_Music* gMusic = NULL;
 
 void c_MenuState::Init(c_GameEngine* game) {
 
@@ -51,6 +54,12 @@ void c_MenuState::Init(c_GameEngine* game) {
 	ltextureMenu.activeButton = 0;
 	ltextureMenu.modifyButton(activeButton, true, activeColor, ltextureMenu.activeButton, game->renderer);
 
+	gMusic = Mix_LoadMUS("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Music\\Billy's Sacrifice.mp3");
+	if (gMusic == NULL) {
+		printf("Could not load music! SDL_mixer Error: %s\n", Mix_GetError());
+	}
+
+	Mix_PlayMusic(gMusic, 0);
 }
 
 void c_MenuState::Cleanup() {
@@ -93,6 +102,17 @@ void c_MenuState::HandleEvents(c_GameEngine* game) {
 				}
 				printf("Current active Button: %d\n", ltextureMenu.getActiveButton());
 			}
+			if (event.key.keysym.sym == SDLK_RETURN) {
+				printf("Pressing enter\n");
+				if (ltextureMenu.getActiveButton() == 0) {
+					this->Close(game);
+					game->ChangeState(c_IntroState::Instance());
+				}
+				else if (ltextureMenu.getActiveButton() == 1) {
+					this->Close(game);
+					game->Quit();
+				}
+			}
 		}
 	}
 }
@@ -102,9 +122,6 @@ void c_MenuState::Update(c_GameEngine* game) {
 }
 
 void c_MenuState::Draw(c_GameEngine* game) {
-	//printf("Layers size: %d\n", ltextureMenu.backgrounds.size());
-	//printf("Rects size: %d\n", ltextureMenu.backgroundRects.size());
-
 	
 	for (int i = 0; i < ltextureMenu.backgroundRects.size(); i++) {
 		SDL_RenderCopy(game->renderer, ltextureMenu.backgroundRects[i].texture, NULL, &ltextureMenu.backgroundRects[i].stretchRect);
@@ -114,8 +131,18 @@ void c_MenuState::Draw(c_GameEngine* game) {
 		SDL_RenderCopy(game->renderer, ltextureMenu.buttons[i].texture, NULL, &ltextureMenu.buttons[i].rect);
 	}
 
-	//for (int i = 0; i < ltextureMenu.buttons.size(); i++) {
-	//	SDL_RenderCopy(game->renderer, ltextureMenu.buttons[i].texture, NULL, &ltextureMenu.buttons[i].stretchRect);
-	//}
+}
 
+void c_MenuState::Close(c_GameEngine* game) {
+	printf("IntroState Cleanup\n");
+	Mix_FreeMusic(gMusic);
+	gMusic = NULL;
+	
+	for (int i = 0; i < ltextureMenu.backgroundRects.size(); i++) {
+		SDL_DestroyTexture(ltextureMenu.backgroundRects[i].texture);
+	}
+
+	for (int i = 0; i < ltextureMenu.buttons.size(); i++) {
+		SDL_DestroyTexture(ltextureMenu.buttons[i].texture);
+	}
 }

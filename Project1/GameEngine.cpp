@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include "GameEngine.h"
 #include "GameState.h"
-
+#include <SDL_mixer.h>
 
 void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool fullscreen) {
     int rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
@@ -16,6 +16,15 @@ void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     }
+
+	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+		printf("Could not initialize SDL Audio! SDL_Error: %s\n", SDL_GetError());
+	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+	{
+		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+	}
 
     this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 

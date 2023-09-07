@@ -13,12 +13,6 @@ LTexture ltextureIntro;
 
 void c_IntroState::Init(c_GameEngine* game) {
 	SDL_SetRenderDrawColor(game->renderer, 0xFF, 0x00, 0x00, 0xFF);
-
-	ltextureIntro.addBackgroundLayer(ltextureIntro.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\Layer_0001_8.png", game->renderer), 0, 0);
-
-	for (int i = 0; i < ltextureIntro.backgrounds.size(); i++) {
-		ltextureIntro.createRect(ltextureIntro.backgroundRects[i].texture, ltextureIntro.backgrounds[i].x, ltextureIntro.backgrounds[i].y, game->screenWidth, game->screenHeight);
-	}
 }
 
 void c_IntroState::Cleanup() {
@@ -56,7 +50,4 @@ void c_IntroState::Draw(c_GameEngine* game) {
 
 	//ltexture.backgroundRects = ltexture.returnRects();
 
-	for (int i = 0; i < ltextureIntro.backgroundRects.size(); i++) {
-		SDL_RenderCopy(game->renderer, ltextureIntro.backgrounds[i].texture, NULL, &ltextureIntro.backgroundRects[i].stretchRect);
-	}
 }

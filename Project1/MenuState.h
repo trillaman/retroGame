@@ -20,6 +20,8 @@ public:
 	void Update(c_GameEngine* game);
 	void Draw(c_GameEngine* game);
 
+	void Close(c_GameEngine* game);
+
 	static c_MenuState* Instance() {
 		return &m_MenuState;
 	}

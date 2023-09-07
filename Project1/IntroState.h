@@ -13,6 +13,8 @@ public:
 	void Init(c_GameEngine* game);
 	void Cleanup();
 
+	void Close(c_GameEngine* game);
+
 	void Pause();
 	void Resume();
 
