@@ -166,9 +166,45 @@ void LTexture::createButton(SDL_Rect rect, std::string text, std::string action,
 	
 	createTextRect(textPosition.x, textPosition.y, 0 ,0);
 
-	MyButtons button = { rect, text, action, textColor, textPosition, active, buttonID, nextButton, text_texture};
+	MyButtons button = { rect, text, action, textColor, textPosition, active, buttonID, nextButton, text_texture };
 	buttons.push_back(button);
 }
+
+void LTexture::createText(SDL_Rect rect, std::string text, SDL_Color textColor, SDL_Point textPosition, SDL_Renderer* renderer) {
+
+	if (TTF_Init() < 0) {
+		printf("Error initializing SDL_ttf: %s", TTF_GetError());
+		TTF_Quit();
+		return;
+	}
+
+	TTF_Font* font;
+	font = TTF_OpenFont("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Fonts\\m5x7.ttf", 24);
+	if (font == NULL) {
+		printf("\nFailed to load font: %s\n", SDL_GetError());
+		TTF_Quit();
+		return;
+	}
+
+	fontText = font;
+
+	SDL_Surface* textSurface = setTextSurface(font, text, textColor);
+
+	SDL_Texture* text_texture;
+	text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+
+	if (text_texture == NULL) {
+		printf("\nFailed to create texture from surface: %s\n", SDL_GetError());
+		TTF_Quit();
+		return;
+	}
+
+	createTextRect(textPosition.x, textPosition.y, 0, 0);
+
+	MyText textRect = { rect, text, textColor, textPosition,  text_texture };
+	texts.push_back(textRect);
+}
+
 
 void LTexture::modifyButton(int buttonID, bool active, SDL_Color color, int activeButton, SDL_Renderer* renderer) {
 	if (activeButton < 0 || activeButton >= buttons.size()) {
@@ -182,4 +218,15 @@ void LTexture::modifyButton(int buttonID, bool active, SDL_Color color, int acti
 	text_texture = SDL_CreateTextureFromSurface(renderer, textSurface);
 	buttons[buttonID].textColor = color;
 	buttons[buttonID].texture = text_texture;
+}
+
+void LTexture::createRectWithColor(SDL_Color color, int x, int y, int WIDTH, int HEIGHT) {
+	AlphaRect alphaRect;
+	alphaRect.alpharect.x = 0;
+	alphaRect.alpharect.y = 0;
+	alphaRect.alpharect.w = WIDTH;
+	alphaRect.alpharect.h = HEIGHT;
+	alphaRect.color = color;
+	 
+	alphaRects.push_back(alphaRect);
 }

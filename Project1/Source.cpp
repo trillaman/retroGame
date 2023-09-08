@@ -28,12 +28,12 @@ int main(int argc, char *argv[]) {
     
     while(game.Running()){
         SDL_RenderClear(game.renderer);
+
 		game.HandleEvents();
 		game.Update();
-        
         game.Draw();
 
-        
+
         SDL_RenderPresent(game.renderer);
 		SDL_Delay(20);
     }

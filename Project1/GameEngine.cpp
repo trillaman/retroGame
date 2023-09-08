@@ -5,6 +5,8 @@
 #include "GameState.h"
 #include <SDL_mixer.h>
 
+
+
 void c_GameEngine::Init(const char* title, int SCREEN_WIDTH, int SCREEN_HEIGHT, bool fullscreen) {
     int rendererFlags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
     int windowFlags = 0;
@@ -112,3 +114,11 @@ void c_GameEngine::Draw() {
 	states.back()->Draw(this);
 }
 
+void c_GameEngine::PlayMusic(const char* filename){
+	this->gMusic = Mix_LoadMUS(filename);
+	if (this->gMusic == NULL) {
+		printf("Could not load music! SDL_mixer Error: %s\n", Mix_GetError());
+	}
+
+	Mix_PlayMusic(this->gMusic, 0);
+}

@@ -6,7 +6,7 @@
 #include "LTexture.h"
 #include <SDL_ttf.h>
 #include <string>
-#include "IntroState.h"
+#include "ChoosePlayer.h"
 #include <SDL_mixer.h>
 
 c_MenuState c_MenuState::m_MenuState;
@@ -14,10 +14,6 @@ c_MenuState c_MenuState::m_MenuState;
 
 LTexture ltextureMenu;
 
-SDL_Color activeColor = { 255,0, 0 };
-SDL_Color inactiveColor = { 0,0, 255 };
-
-Mix_Music* gMusic = NULL;
 
 void c_MenuState::Init(c_GameEngine* game) {
 
@@ -29,8 +25,7 @@ void c_MenuState::Init(c_GameEngine* game) {
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\near-clouds.png", game->renderer), 0, 0, true);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\mountains.png", game->renderer), 0, 0, false);
 	ltextureMenu.addBackgroundLayer(ltextureMenu.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\trees.png", game->renderer), 0, 0, false);
-	SDL_SetRenderDrawColor(game->renderer, 255, 0, 0, 255);
-
+	
 	ltextureMenu.createButton({ game->screenWidth / 2 - 200, game->screenHeight - 250, 100, 100 }, "PLAY", "PLAY", { 0, 0, 255 }, { game->screenWidth / 2 - 200, game->screenHeight - 250 }, true, 0, 1, game->renderer);
 	ltextureMenu.createButton({game->screenWidth / 2 - 200, game->screenHeight - 100, 100, 100 }, "QUIT", "QUIT", { 0, 0, 255 }, { game->screenWidth / 2 - 200, game->screenHeight - 100 }, false, 1, 0 , game->renderer);
 
@@ -52,14 +47,9 @@ void c_MenuState::Init(c_GameEngine* game) {
 	}
 
 	ltextureMenu.activeButton = 0;
-	ltextureMenu.modifyButton(activeButton, true, activeColor, ltextureMenu.activeButton, game->renderer);
+	ltextureMenu.modifyButton(activeButton, true, game->activeColor, ltextureMenu.activeButton, game->renderer);
 
-	gMusic = Mix_LoadMUS("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Music\\Billy's Sacrifice.mp3");
-	if (gMusic == NULL) {
-		printf("Could not load music! SDL_mixer Error: %s\n", Mix_GetError());
-	}
-
-	Mix_PlayMusic(gMusic, 0);
+	game->PlayMusic("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Music\\Billy's Sacrifice.mp3");
 }
 
 void c_MenuState::Cleanup() {
@@ -85,8 +75,8 @@ void c_MenuState::HandleEvents(c_GameEngine* game) {
 				printf("Pressing down\n");
 				int actButton = ltextureMenu.getActiveButton();
 				if (actButton < ltextureMenu.buttons.size() - 1) {
-					ltextureMenu.modifyButton(actButton, false, inactiveColor, ltextureMenu.activeButton, game->renderer);
-					ltextureMenu.modifyButton(actButton + 1, true, activeColor, ltextureMenu.activeButton, game->renderer);
+					ltextureMenu.modifyButton(actButton, false, game->inactiveColor, ltextureMenu.activeButton, game->renderer);
+					ltextureMenu.modifyButton(actButton + 1, true, game->activeColor, ltextureMenu.activeButton, game->renderer);
 					ltextureMenu.setActiveButton(actButton + 1);
 				}
 				printf("Current active Button: %d\n", ltextureMenu.getActiveButton());
@@ -96,8 +86,8 @@ void c_MenuState::HandleEvents(c_GameEngine* game) {
 				printf("Pressing up\n");
 				int actButton = ltextureMenu.getActiveButton();
 				if (actButton > 0) {
-					ltextureMenu.modifyButton(actButton, false, inactiveColor, ltextureMenu.activeButton, game->renderer);
-					ltextureMenu.modifyButton(actButton - 1, true, activeColor, ltextureMenu.activeButton, game->renderer);
+					ltextureMenu.modifyButton(actButton, false, game->inactiveColor, ltextureMenu.activeButton, game->renderer);
+					ltextureMenu.modifyButton(actButton - 1, true, game->activeColor, ltextureMenu.activeButton, game->renderer);
 					ltextureMenu.setActiveButton(actButton - 1);
 				}
 				printf("Current active Button: %d\n", ltextureMenu.getActiveButton());
@@ -106,7 +96,7 @@ void c_MenuState::HandleEvents(c_GameEngine* game) {
 				printf("Pressing enter\n");
 				if (ltextureMenu.getActiveButton() == 0) {
 					this->Close(game);
-					game->ChangeState(c_IntroState::Instance());
+					game->ChangeState(c_ChoosePlayer::Instance());
 				}
 				else if (ltextureMenu.getActiveButton() == 1) {
 					this->Close(game);
@@ -134,9 +124,10 @@ void c_MenuState::Draw(c_GameEngine* game) {
 }
 
 void c_MenuState::Close(c_GameEngine* game) {
+	SDL_SetRenderDrawColor(game->renderer, 0x00, 0x00, 0x00, 0xFF);
 	printf("IntroState Cleanup\n");
-	Mix_FreeMusic(gMusic);
-	gMusic = NULL;
+	//Mix_FreeMusic(game->gMusic);
+	//game->gMusic = NULL;
 	
 	for (int i = 0; i < ltextureMenu.backgroundRects.size(); i++) {
 		SDL_DestroyTexture(ltextureMenu.backgroundRects[i].texture);

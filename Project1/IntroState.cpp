@@ -12,7 +12,7 @@ LTexture ltextureIntro;
 
 
 void c_IntroState::Init(c_GameEngine* game) {
-	SDL_SetRenderDrawColor(game->renderer, 0xFF, 0x00, 0x00, 0xFF);
+	SDL_SetRenderDrawColor(game->renderer, 0x00, 0x00, 0x00, 0xFF);
 }
 
 void c_IntroState::Cleanup() {

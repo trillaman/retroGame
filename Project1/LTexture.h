@@ -20,6 +20,11 @@ public:
         SDL_Rect stretchRect;
         SDL_Texture* texture;
     } MyRect;
+
+    typedef struct {
+        SDL_Rect alpharect;
+        SDL_Color color;
+    } AlphaRect;
         
 
     std::vector<Entity> backgrounds;
@@ -38,6 +43,10 @@ public:
     std::vector<SDL_Rect> textRects;
     std::vector<SDL_Rect> returnTextRects() { return textRects; }
 
+    std::vector<AlphaRect> alphaRects;
+
+    std::vector<SDL_Rect> playersRect;
+
     struct MyButtons {
         SDL_Rect rect;
         std::string text;
@@ -50,10 +59,19 @@ public:
         SDL_Texture* texture;
     };
 
+    struct MyText {
+		SDL_Rect rect;
+		std::string text;
+		SDL_Color textColor;
+		SDL_Point textPosition;
+		SDL_Texture* texture;
+	};
+
     int activeButton;
     int getActiveButton() { return activeButton; }
 
     std::vector<MyButtons> buttons;
+    std::vector<MyText> texts;
 
     void modifyButton(int buttonID, bool active, SDL_Color color, int activeButton, SDL_Renderer* renderer);
 
@@ -69,6 +87,12 @@ public:
 
     void createTextRect(int x, int y, int WIDTH, int HEIGHT);
 
+    void createText(SDL_Rect rect,
+        std::string text,
+        SDL_Color textColor,
+        SDL_Point textPosition,
+        SDL_Renderer* renderer);
+
     TTF_Font* fontText = NULL;
 
     SDL_Texture* loadTexture(std::string path, SDL_Renderer* renderer);
@@ -79,6 +103,8 @@ public:
 
     void createRect(SDL_Texture* texture, int x, int y, int WIDTH, int HEIGHT);
     void createRectWithRepeat(int x, int y, int WIDTH, int HEIGHT);
+
+    void createRectWithColor(SDL_Color color, int x, int y, int WIDTH, int HEIGHT);
 
     void setActiveButton(int i) {
         if (i <= 0) {

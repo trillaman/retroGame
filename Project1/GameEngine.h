@@ -3,6 +3,7 @@
 #define GAMEENGINE_H
 
 #include "SDL.h"
+#include <SDL_mixer.h>
 
 #include <vector>
 using namespace std;
@@ -31,6 +32,8 @@ public:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
+	Mix_Music* gMusic;
+
 	int screenWidth;
 	int screenHeight;
 	
@@ -45,6 +48,10 @@ public:
 		return renderer;
 	}
 
+	void PlayMusic(const char* filename);
+
+	SDL_Color activeColor = { 255,0, 0 };
+	SDL_Color inactiveColor = { 0,0, 255 };
 
 private:
 	// the stack of states
