@@ -119,18 +119,18 @@ public:
     }
 
     SDL_Point getTextureSize(SDL_Texture* texture) {
-        SDL_Point size;
+        SDL_Point size = SDL_Point();
         SDL_QueryTexture(texture, NULL, NULL, &size.x, &size.y);
         return size;
     }
 
     SDL_Point getTextureWidthInPixels(SDL_Texture* texture) {
-		SDL_Point size;
+		SDL_Point size = SDL_Point();
 		SDL_QueryTexture(texture, NULL, NULL, &size.x, NULL);
 		return size;
 	}
 
-    std::vector<SDL_Rect> getRectsWithRepeat() {};
+    std::vector<SDL_Rect> getRectsWithRepeat() { return backgroundRectsWithRepeat; };
 
     bool loadText(std::string textureText, SDL_Color textColorParam, SDL_Point position, SDL_Renderer* renderer);
 

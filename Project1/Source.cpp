@@ -19,10 +19,6 @@ int main(int argc, char *argv[]) {
 
     game.screenWidth = SCREEN_WIDTH;
     game.screenHeight = SCREEN_HEIGHT;
-
-    bool quit = false;
-
-    SDL_Event e;
 	
     game.ChangeState(c_MenuState::Instance());
     

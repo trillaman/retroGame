@@ -38,15 +38,15 @@ protected:
 private:
 	static c_MenuState m_MenuState;
 
-	SDL_Surface* bg;
-	SDL_Surface* fader;
-	int alpha;
+	SDL_Surface* bg = NULL;
+	SDL_Surface* fader = NULL;
+	int alpha = 0;
 
 	SDL_Renderer* renderer = NULL;
 
-	LTexture mBackgroundTexture;
-	LTexture mForeGroundTexture;
-	LTexture mTreesTexture;
+	LTexture mBackgroundTexture = LTexture();
+	LTexture mForeGroundTexture = LTexture();
+	LTexture mTreesTexture = LTexture();
 	int activeButton = 0;
 
 };

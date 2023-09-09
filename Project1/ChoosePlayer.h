@@ -14,15 +14,13 @@ public:
 	void Init(c_GameEngine* game);
 	void Cleanup();
 
-	void Close(c_GameEngine* game);
-
 	void Pause();
 	void Resume();
 
 	void HandleEvents(c_GameEngine* game);
 	void Update(c_GameEngine* game);
 	void Draw(c_GameEngine* game);
-
+	
 	static c_ChoosePlayer* Instance() {
 		return &m_ChoosePlayer;
 	}
@@ -31,6 +29,13 @@ public:
 		return &m_ChoosePlayer;
 	}
 
+	int getCurrentAnimFrame() {
+		return currentAnimFrame;
+	}
+
+	void setCurrentAnimFrame(int frame) {
+		currentAnimFrame = frame;
+	}
 
 
 protected:
@@ -39,15 +44,23 @@ protected:
 private:
 	static c_ChoosePlayer m_ChoosePlayer;
 
-	SDL_Surface* bg;
-	SDL_Surface* fader;
-	int alpha;
+	SDL_Surface* bg = NULL;
+	SDL_Surface* fader = NULL;
+	int alpha = 0;
 
 	SDL_Renderer* renderer = NULL;
 
-	LTexture mBackgroundTexture;
-	LTexture mForeGroundTexture;
-	LTexture mTreesTexture;
+	LTexture mBackgroundTexture = LTexture();
+	LTexture mForeGroundTexture = LTexture();
+	LTexture mTreesTexture = LTexture();
+
+	void Close(c_GameEngine* game);
+
+	//int threadFunction(void* frame);
+
+	int currentAnimFrame = 0;
+
+	
 };
 
 #endif

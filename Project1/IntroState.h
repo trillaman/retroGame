@@ -44,9 +44,9 @@ private:
 
 	SDL_Renderer* renderer = NULL;
 
-	LTexture mBackgroundTexture;
-	LTexture mForeGroundTexture;
-	LTexture mTreesTexture;
+	LTexture mBackgroundTexture = LTexture();
+	LTexture mForeGroundTexture = LTexture();
+	LTexture mTreesTexture = LTexture();
 };
 
 #endif

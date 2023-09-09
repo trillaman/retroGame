@@ -113,7 +113,6 @@ bool LTexture::loadText(std::string textureText, SDL_Color textColorParam, SDL_P
 	int textW = 0;
 	int textH = 0;
 	SDL_QueryTexture(text_texture, NULL, NULL, &textW, &textH);
-	SDL_Rect dest = { 0, 0 , textW, textH };
 	createRect(text_texture, position.x, position.y, textW, textH);
 
 	//SDL_FreeSurface(textSurface);
