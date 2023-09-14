@@ -199,9 +199,9 @@ void c_ChoosePlayer::Draw(c_GameEngine* game) {
 	}
 	
 
-	SDL_RenderCopy(game->renderer, textures[current_frame], NULL, &ltexturePlayer.playersRect[0]);
-
-
+	SDL_RenderCopy(game->renderer, bawlerGirl->animTextures[current_frame], NULL, &ltexturePlayer.playersRect[0]);
+	//SDL_RenderCopy(game->renderer, textures2[current_frame], NULL, &ltexturePlayer.playersRect[1]);
+	printf("Current frame: %d\n", bawlerGirl->getCurrentAnimFrame());
 }
 
 void c_ChoosePlayer::Close(c_GameEngine* game) {
