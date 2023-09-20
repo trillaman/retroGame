@@ -5,7 +5,7 @@
 #include "SDL.h"
 #include <string>
 #include <SDL_image.h>
-
+#include "GameEngine.h"
 
 class Character
 {
@@ -14,9 +14,23 @@ public:
 	void PlayPunchAnimation();
 	void PlayJumpAnimation();
 	void PlayWalkAnimation();
-	void PlayIdleAnimation();
+
+	void IncreaseCurrentFrame();
+
+	SDL_Texture* PlayIdleAnimation();
+
+	int InitIdleAnimation(c_GameEngine* game, std::string pathToAnimation);
 
 	void CleanupCharacter();
+
+	void setPos(int x, int y) {
+		posX = x;
+		posY = y;
+	}
+
+	int InitCharacter();
+
+	int InitCharacterRect();
 
 	Character(std::string name, int posX, int posY);
 
@@ -33,7 +47,13 @@ public:
 	}
 
 	void setNameWidth(int w) {
-		this->nameWidth = w;
+		if (w == NULL || w == 0) {
+			this->nameWidth = this->name.length() * 30;
+			return;
+		}
+		else {
+			this->nameWidth = w;
+		}
 	}
 
 	void setNameHeight(int h) {
@@ -100,6 +120,14 @@ public:
 		return current_frame;
 	}
 
+	SDL_Rect getRect() {
+		return this->rect;
+	}
+
+	void setRect(SDL_Rect rect) {
+		this->rect = rect;
+	}
+
 
 	int count = 0;
 
@@ -109,12 +137,13 @@ public:
 
 	int current_frame = 0;
 
+
 private:
 	static Character m_Character;
 
 	SDL_Texture* texture;
-	SDL_Rect* rect;
-
+	
+	SDL_Rect rect;
 
 	int w = 0, h = 0;
 

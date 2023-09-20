@@ -14,8 +14,7 @@ c_ChoosePlayer c_ChoosePlayer::m_ChoosePlayer;
 LTexture ltexturePlayer;
 
 Character* bawlerGirl;
-
-std::vector<Character*> characters;
+Character* monk;
 
 SDL_Color alphaColor = { 0, 0, 0, 150 };
 
@@ -28,23 +27,18 @@ SDL_Thread* thread;
 
 c_ChoosePlayer* inst = c_ChoosePlayer::Instance();
 
-
+//This method is used to increase the frame of all characters in order to play idle animation
 int increaseCharacterFrame(void* data) {
-	//This method is used to increase the frame of all characters in order to play idle animation
 	while (true) {
-		for (int i = 0; i < characters.size(); i++) {
-			characters[i]->current_frame = (characters[i]->current_frame + 1) % characters[i]->idleAnim->count;
-			characters[i]->setCurrentAnimFrame(characters[i]->current_frame);
-			if (characters[i]->idleAnim->delays[characters[i]->current_frame]) {
-				characters[i]->delay = characters[i]->idleAnim->delays[characters[i]->current_frame];
-			}
-			SDL_Delay(characters[i]->delay);
+		for (int i = 0; i < inst->characters.size(); i++) {
+			inst->characters[i]->IncreaseCurrentFrame();
 		}
 	}
 	return 0;
 }
 
 void c_ChoosePlayer::Init(c_GameEngine* game) {
+	//INIT SCENE
 	SDL_SetRenderDrawColor(game->renderer, 0x00, 0x00, 0x00, 0xAA);
 	ltexturePlayer.addBackgroundLayer(ltexturePlayer.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\sky.png", game->renderer), 0, 0, false);
 	ltexturePlayer.addBackgroundLayer(ltexturePlayer.loadTexture("C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\BG\\MenuState\\far-clouds.png", game->renderer), 0, 0, true);
@@ -70,63 +64,66 @@ void c_ChoosePlayer::Init(c_GameEngine* game) {
 		}
 	}
 
+	
+
 	//Alpha to dim the background
 	ltexturePlayer.createRectWithColor(alphaColor, 0, 0, game->screenWidth, game->screenHeight);
 
-
+	//Header text
 	std::string chPlayer = "Choose Player";
 	int chPlayerWidth = chPlayer.length() * 20;
 	ltexturePlayer.createText({ game->screenWidth / 2 - (chPlayerWidth/2), 100, chPlayerWidth, 100 }, chPlayer, { 255, 255, 255, 255 }, {0,0}, game->renderer);
 
+	//END OF INIT SCENE
 	
-	bawlerGirl = new Character("Bawler Girl", 0, 0);
-	bawlerGirl->setNameWidth(bawlerGirl->getName().length() * 20);
-	bawlerGirl->idleAnimPath = "C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Players\\Brawler Girl\\idle.gif";
-	bawlerGirl->idleAnim = IMG_LoadAnimation(bawlerGirl->idleAnimPath.c_str());
-	
-	if (bawlerGirl->idleAnim == NULL) {
-		printf("Couldnt load animation\n");
-		bawlerGirl->idleAnim == NULL;
-	}
-	else {
+
+	//Init character 1
+	bawlerGirl = new Character("Bawler Girl", game->screenWidth / 2 - 550, 250);
+	bawlerGirl->InitCharacter();
+
+	//Load Idle animation
+	if (bawlerGirl->InitIdleAnimation(game, "C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Players\\Brawler Girl\\idle.gif") != 1) {
 		bawlerGirl->setWidth(bawlerGirl->idleAnim->w * 2);
 		bawlerGirl->setHeight(bawlerGirl->idleAnim->h * 2);
 	}
-	
-	bawlerGirl->setPosX(game->screenWidth / 2 - 550);
-	bawlerGirl->setPosY(250);
 
-	characters.push_back(bawlerGirl);
+	//Init Chracter Rect
+	bawlerGirl->InitCharacterRect();
+	SDL_Rect rect = bawlerGirl->getRect();
+	ltexturePlayer.playersRect.push_back(rect);
 
-	SDL_Rect bawlerGirlRect;
-	bawlerGirlRect.x = bawlerGirl->getPosX();
-	bawlerGirlRect.y = bawlerGirl->getPosY();
-	bawlerGirlRect.w = bawlerGirl->getWidth();
-	bawlerGirlRect.h = bawlerGirl->getHeight();
+	inst->characters.push_back(bawlerGirl);
 
-	ltexturePlayer.playersRect.push_back(bawlerGirlRect);
-
+	//Create character button
 	ltexturePlayer.createButton({ game->screenWidth / 2 - 400, 300, bawlerGirl->getNameWidth(), 100}, bawlerGirl->getName(), "CHOOSE", {0, 0, 255}, {0,0}, true, 0, 1, game->renderer);
-	ltexturePlayer.modifyButton(activeButton, true, game->activeColor, ltexturePlayer.activeButton, game->renderer);
-	//ltexturePlayer.createText({ game->screenWidth / 2 - 400, 300, chPlayerWidth, 100}, player1, { 255, 255, 255, 255 }, { 0,0 }, game->renderer);
+	ltexturePlayer.modifyButton(activeButton, true, game->activeColor, ltexturePlayer.activeButton, game->renderer); // run this only once for first button
+
+	//end of character 1
 
 
-	if (bawlerGirl->idleAnim != NULL) {
 
-		bawlerGirl->idleAnimTextures = (SDL_Texture**)SDL_calloc(bawlerGirl->idleAnim->count, sizeof(*characters[0]->animTextures));
+	//Init character 2
+
+	monk = new Character("Monk", game->screenWidth / 2 - 500, 450);
+	monk->InitCharacter();
+
+	//Load Idle animation
+	if (monk->InitIdleAnimation(game, "C:\\Users\\Olek\\Documents\\SymfoniaCpp\\Project1\\retroGame\\Players\\Monk\\01_idle_2.gif") != 1) {
+		monk->setWidth(monk->idleAnim->w);
+		monk->setHeight(monk->idleAnim->h);
 	}
 
-	if (bawlerGirl->idleAnimTextures == NULL) {
-		printf("Couldnt allocate memory\n");
-	}
-	else {
+	//Init Chracter Rect
+	monk->InitCharacterRect();
+	SDL_Rect monkRect = monk->getRect();
+	ltexturePlayer.playersRect.push_back(monkRect);
 
-		if (bawlerGirl->idleAnim != NULL) {
-			for (int j = 0; j < bawlerGirl->idleAnim->count; ++j) {
-				bawlerGirl->idleAnimTextures[j] = SDL_CreateTextureFromSurface(game->renderer, bawlerGirl->idleAnim->frames[j]);
-			}
-		}
-	}
+	inst->characters.push_back(monk);
+
+	//Create character button
+	ltexturePlayer.createButton({ game->screenWidth / 2 - 400, 450, monk->getNameWidth(), 100 }, monk->getName(), "CHOOSE", { 0, 0, 255 }, { 0,0 }, true, 1, 2, game->renderer);
+
+	//end of character 2
 
 	
 	thread = SDL_CreateThread(increaseCharacterFrame, "func", NULL);
@@ -134,6 +131,7 @@ void c_ChoosePlayer::Init(c_GameEngine* game) {
 	if (thread == NULL) {
 		printf("Couldnt create thread\n");
 	}
+
 	
 }
 
@@ -208,16 +206,22 @@ void c_ChoosePlayer::Draw(c_GameEngine* game) {
 
 
 	for (int i = 0; i < characters.size(); i++) {
-		SDL_RenderCopy(game->renderer, characters[i]->idleAnimTextures[characters[i]->current_frame], NULL, &ltexturePlayer.playersRect[0]);
+		//characters[i]->PlayIdleAnimation2(game->renderer, &ltexturePlayer.playersRect[i]);
+
+		SDL_RenderCopy(game->renderer, characters[i]->PlayIdleAnimation(), NULL, &ltexturePlayer.playersRect[i]);
 	}
 }
 	
 
 void c_ChoosePlayer::Close(c_GameEngine* game) {
 	IMG_FreeAnimation(bawlerGirl->idleAnim);
+	IMG_FreeAnimation(monk->idleAnim);
 	for (int i = 0; i < characters.size(); i++) {
 		SDL_free(characters[i]->idleAnimTextures);
+		delete characters[i];
 	}
+	delete bawlerGirl;
+	delete monk;
 	SDL_WaitThread(thread, NULL);
 	//SDL_WaitThread(thread2, NULL);
 }

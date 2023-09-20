@@ -7,6 +7,7 @@
 #include "GameState.h"
 #include "LTexture.h"
 #include "GameEngine.h"
+#include "Character.h"
 
 class c_ChoosePlayer : public c_GameState
 {
@@ -36,6 +37,8 @@ public:
 	void setCurrentAnimFrame(int frame) {
 		currentAnimFrame = frame;
 	}
+
+	std::vector<Character*> characters;
 
 
 protected:
